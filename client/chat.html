@@ -1,0 +1,20 @@
+<head>
+    <title>Let's Chat</title>
+</head>
+
+<body>
+{{> body}}
+</body>
+
+<template name="message">
+    {{text}}
+</template>
+
+<template name="body">
+    {{#each messages}}
+    <h3>{{> message}}</h3>
+    {{/each}}
+
+    <textarea id="message"></textarea>
+    <input type="button" value="Send Message"/>
+</template>
