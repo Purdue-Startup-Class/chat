@@ -6,14 +6,20 @@
 {{> body}}
 </body>
 
+<template name="messageTime">
+    <div class="time">{{fromNow time}}</div>
+</template>
+
 <template name="message">
-    {{text}}
+    <div>
+        <span class="messageText">{{text}}</span>
+    </div>
 </template>
 
 <template name="body">
-    {{#each messages}}
-    <h3>{{> message}}</h3>
-    {{/each}}
+    {{#addTimestamp messages}}
+    {{> message}}
+    {{/addTimestamp}}
 
     <textarea id="message"></textarea>
     <input type="button" value="Send Message"/>
