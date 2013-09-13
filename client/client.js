@@ -1,36 +1,34 @@
-Meteor.subscribe("messages");
+//Meteor.subscribe("all-messages");
+
+//defaults to yesterday
+//Meteor.subscribe("messages-after");
+
+Deps.autorun(function () {
+    Meteor.subscribe("messages-longer-than", Session.get("minimumLength"));
+});
 
 Template.body.events({
     "click input": function () {
-        var messageBox = $("#message");
-        Messages.insert({text: messageBox.val(), time: new Date()});
-        messageBox.val("");
+        var text = $("#message").val();
+        Messages.insert({text: text, textLength: text.length, time: new Date()});
+    },
+    "change #minimumLengthInput": function (e) {
+        var minimumLength = parseFloat($(e.currentTarget).val());
+        Session.set("minimumLength", minimumLength);
     }
 });
 
 //Helpers
 
 Template.body.messages = function () {
-    return Messages.find();
+    return Messages.find({ textLength : {$gt : 2} });
 };
 
-Template.body.addTimestamp = function (context, options) {
-    var ret = "";
-
-    //see https://github.com/meteor/meteor/wiki/Spark
-    //also partially based off https://github.com/meteor/meteor/blob/devel/packages/templating/deftemplate.js
-    return Spark.list(context, function (item) {
-        return Spark.labelBranch(item._id, function () {
-            //isolate needed to preserve reactivity of template
-            var html = Spark.isolate(_.bind(options.fn, null, item));
-            //add the message time
-            html += Spark.isolate(_.bind(Template.messageTime, null, item));
-            return Spark.setDataContext(item, html);
-        });
-    });
-
-    return ret;
-};
+//Template.body.messagesWith = function (substring) {
+//    return Messages.find({
+//        text: {$regex: ".*" + substring + ".*"}
+//    });
+//};
 
 // Template methods
 
