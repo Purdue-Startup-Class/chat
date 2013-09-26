@@ -18,18 +18,9 @@
 </template>
 
 <template name="body">
-    <div>
-        <span>Longer than: </span>
-        <input id="minimumLengthInput" type="number" min="0"/>
-    </div>
-
     {{#each messages}}
     {{> message}}
     {{/each}}
-
-    <!--{{#each messagesWith 'hello'}}-->
-    <!--{{> message}}-->
-    <!--{{/each}}-->
 
     <textarea id="message"></textarea>
     <input type="button" value="Send Message"/>

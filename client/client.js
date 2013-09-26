@@ -1,11 +1,5 @@
-//Meteor.subscribe("all-messages");
-
 //defaults to yesterday
-//Meteor.subscribe("messages-after");
-
-Deps.autorun(function () {
-    Meteor.subscribe("messages-longer-than", Session.get("minimumLength"));
-});
+Meteor.subscribe("messages-after");
 
 Template.body.events({
     "click input": function () {
@@ -23,12 +17,6 @@ Template.body.events({
 Template.body.messages = function () {
     return Messages.find({ textLength : {$gt : 2} });
 };
-
-//Template.body.messagesWith = function (substring) {
-//    return Messages.find({
-//        text: {$regex: ".*" + substring + ".*"}
-//    });
-//};
 
 // Template methods
 
