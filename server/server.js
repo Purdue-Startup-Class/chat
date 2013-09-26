@@ -1,6 +1,6 @@
 Meteor.publish("messages-after", function (time) {
     //default to yesterday
-    if (time === null) {
+    if (!time) {
         time = new Date();
         time.setDate(time.getDate() - 1);
     }
