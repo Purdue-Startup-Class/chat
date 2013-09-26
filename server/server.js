@@ -1,4 +1,9 @@
 Meteor.publish("messages-after", function (time) {
+    //simulate delay
+//    for (var i = 0; i < 1500000000; i++) {
+//        i = i - .5;
+//    }
+
     //default to yesterday
     if (!time) {
         time = new Date();

@@ -2,12 +2,25 @@
     <title>Let's Chat</title>
 </head>
 
-<body>
-{{> body}}
-</body>
+<template name="about">
+    <img class="aboutImage" src="about.jpg">
 
-<template name="messageTime">
-    <div class="time">{{fromNow time}}</div>
+    <div class="about">
+        <span class="text">This application was built with pride in Indiana</span>
+        <button>Go back</button>
+    </div>
+</template>
+
+<template name="front">
+    Welcome to our amazing chat application.
+    <button id="startRoom">Start chat room</button>
+</template>
+
+<template name="loading">
+    <div>
+        <span>Loading...</span>
+    </div>
+    <img src="/loading.jpg">
 </template>
 
 <template name="message">
@@ -17,11 +30,20 @@
     {{> messageTime}}
 </template>
 
-<template name="body">
+<template name="messageTime">
+    <div class="time">{{fromNow time}}</div>
+</template>
+
+<template name="room">
     {{#each messages}}
     {{> message}}
     {{/each}}
 
     <textarea id="message"></textarea>
     <input type="button" value="Send Message"/>
+
+    <div>
+        <a href="{{pathFor 'room' params}}">Share this link</a>
+        <a href="{{pathFor 'front'}}">Go back</a>
+    </div>
 </template>

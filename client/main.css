@@ -1,3 +1,18 @@
 .time {
     color: lightgray
 }
+
+.loading {
+    position: relative;
+}
+
+.aboutImage {
+    position: relative;
+    height: 35%;
+    width: 35%;
+}
+
+.about .text {
+    display: inline-block;
+    margin-left: 50px;
+}
