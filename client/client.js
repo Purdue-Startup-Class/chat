@@ -1,6 +1,12 @@
 //defaults to yesterday
 var messagesSubscription = Meteor.subscribe("messages-after");
 
+Accounts.ui.config({
+    requestPermissions: {
+        facebook: ["user_likes"]
+    }
+});
+
 Template.front.events({
     "click button": function () {
         //future? continue generating if the room already exists
@@ -16,6 +22,14 @@ Template.about.events({
         Router.go("front");
     }
 });
+
+Template.message.userName = function (userId) {
+    return Meteor.users.findOne({_id: userId}).profile.name;
+};
+
+Template.room.roomName = function () {
+    return Session.get("roomName");
+};
 
 Template.room.events({
     "click input": function () {

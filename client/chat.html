@@ -13,6 +13,7 @@
 
 <template name="front">
     Welcome to our amazing chat application.
+    {{loginButtons}}
     <button id="startRoom">Start chat room</button>
 </template>
 
@@ -25,6 +26,7 @@
 
 <template name="message">
     <div>
+        <span class="messageName">{{userName userId}}</span>
         <span class="messageText">{{text}}</span>
     </div>
     {{> messageTime}}
@@ -35,6 +37,10 @@
 </template>
 
 <template name="room">
+    <div>
+        <span>{{roomName}}</span>
+    </div>
+
     {{#each messages}}
     {{> message}}
     {{/each}}
@@ -43,7 +49,7 @@
     <input type="button" value="Send Message"/>
 
     <div>
-        <a href="{{pathFor 'room' params}}">Share this link</a>
+        <a href="{{pathFor 'room' params}}">{{urlFor 'room' params}}</a>
         <a href="{{pathFor 'front'}}">Go back</a>
     </div>
 </template>

@@ -1,18 +1,27 @@
 Meteor.publish("messages-after", function (time) {
-    //simulate delay
-//    for (var i = 0; i < 1500000000; i++) {
-//        i = i - .5;
-//    }
-
     //default to yesterday
     if (!time) {
         time = new Date();
         time.setDate(time.getDate() - 1);
     }
 
-    return Messages.find({
+    var messages = Messages.find({
         time: { $gt: time }
     });
+
+    var userIds = _.uniq(messages.map(function (message) {
+        return message.userId;
+    }));
+
+    var users = Meteor.users.find({
+        userId: { $in: userIds }
+    }, {
+        fields: {
+            profile: 1
+        }
+    });
+
+    return [messages, users];
 });
 
 Meteor.methods({
@@ -28,6 +37,7 @@ Meteor.startup(function () {
     Messages.allow({
         insert: function (userId, doc) {
             check(doc.text, String);
+            doc.userId = userId;
             return doc.text && doc.textLength > 0;
         },
         update: function (userId, doc, fields, modifier) {
@@ -37,5 +47,17 @@ Meteor.startup(function () {
         remove: function (userId, doc) {
             return false;
         }
+    });
+});
+
+Meteor.startup(function () {
+    Accounts.loginServiceConfiguration.remove({
+        service: "twitter"
+    });
+
+    Accounts.loginServiceConfiguration.insert({
+        service: "twitter",
+        consumerKey: Meteor.settings["TWITTER_CLIENTID"],
+        secret: Meteor.settings["TWITTER_SECRET"]
     });
 });
