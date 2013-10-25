@@ -1,12 +1,6 @@
 //defaults to yesterday
 var messagesSubscription = Meteor.subscribe("messages-after");
 
-Accounts.ui.config({
-    requestPermissions: {
-        facebook: ["user_likes"]
-    }
-});
-
 Template.front.events({
     "click button": function () {
         //future? continue generating if the room already exists
@@ -24,12 +18,39 @@ Template.about.events({
 });
 
 Template.message.userName = function (userId) {
-    return Meteor.users.findOne({_id: userId}).profile.name;
+    var user = Meteor.users.findOne({_id: userId});
+
+    if (user && user.profile.name)
+        return user.profile.name;
 };
 
 Template.room.roomName = function () {
     return Session.get("roomName");
 };
+
+//Template.room.rendered = function () {
+//    Messages.find().observe({
+//        added: function (message) {
+//            var messageDom = "<div id=" + message._id + ">";
+//            if (message.userId) {
+//                messageDom += "<span class='messageName'>" +
+//                    Template.message.userName(message.userId) + "</span>";
+//            }
+//            messageDom += " <span class='messageText' style='font-size: 20px;'>"
+//                + message.text + "</span></div>";
+//
+//            $('#imperativeDiv').append(messageDom);
+//        },
+//        changed: function (message) {
+//            //If you could make changes in our app
+//            //we would have to patch those in here
+//        },
+//        removed: function (message) {
+//            //If you could remove messages
+//            $('#' + message._id).detach();
+//        }
+//    });
+//};
 
 Template.room.events({
     "click input": function () {

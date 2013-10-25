@@ -9,3 +9,6 @@ iron-router
 accounts-base
 accounts-ui
 accounts-twitter
+accounts-facebook
+insecure
+autopublish
