@@ -1,27 +1,30 @@
-Meteor.publish("messages-after", function (time) {
-    //default to yesterday
-    if (!time) {
-        time = new Date();
-        time.setDate(time.getDate() - 1);
-    }
+Meteor.startup(function () {
 
-    var messages = Messages.find({
-        time: { $gt: time }
-    });
-
-    var userIds = _.uniq(messages.map(function (message) {
-        return message.userId;
-    }));
-
-    var users = Meteor.users.find({
-        userId: { $in: userIds }
-    }, {
-        fields: {
-            profile: 1
+    Meteor.publish("messages-after", function (time) {
+        //default to yesterday
+        if (!time) {
+            time = new Date();
+            time.setDate(time.getDate() - 1);
         }
-    });
 
-    return [messages, users];
+        var messages = Messages.find({
+            time: { $gt: time }
+        });
+
+        var userIds = _.uniq(messages.map(function (message) {
+            return message.userId;
+        }));
+
+        var users = Meteor.users.find({
+            userId: { $in: userIds }
+        }, {
+            fields: {
+                profile: 1
+            }
+        });
+
+        return [messages, users];
+    });
 });
 
 Meteor.methods({
@@ -36,9 +39,13 @@ Meteor.methods({
 Meteor.startup(function () {
     Messages.allow({
         insert: function (userId, doc) {
-            check(doc.text, String);
+            var text = doc._document.text;
+
+//            check(text, String);
+
             doc.userId = userId;
-            return doc.text && doc.textLength > 0;
+
+            return text;
         },
         update: function (userId, doc, fields, modifier) {
             check(doc.text, String);

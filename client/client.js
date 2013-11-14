@@ -24,7 +24,9 @@ Template.about.events({
 });
 
 Template.message.userName = function (userId) {
-    return Meteor.users.findOne({_id: userId}).profile.name;
+    return "";
+
+//    return Meteor.users.findOne({_id: userId}).profile.name;
 };
 
 Template.room.roomName = function () {
@@ -40,6 +42,10 @@ Template.room.events({
             text: text,
             textLength: text.length,
             time: new Date()
+        }, function (error, _id) {
+            if (error) {
+                console.log("error", error, _id);
+            }
         });
 
         //clear the input
@@ -52,6 +58,11 @@ Template.room.events({
 });
 
 // Template methods
+
+Template.message.getText = function () {
+    var message = this;
+    return message.getText();
+};
 
 Template.message.rendered = function () {
     $(this.find(".messageText")).animate({ fontSize: "20px" });
@@ -69,8 +80,11 @@ Router.map(function () {
         data: function () {
             var roomName = this.params.name;
             Session.set("roomName", this.params.name);
+
+            var messages = Messages.find({room: roomName});
+
             return {
-                messages: Messages.find({room: roomName}),
+                messages: messages,
                 params: this.params
             };
         },
