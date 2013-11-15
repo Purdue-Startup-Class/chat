@@ -61,7 +61,7 @@ Template.room.events({
 
 Template.message.getText = function () {
     var message = this;
-    return message.getText();
+    return Emoticon.getHtml(message.getText());
 };
 
 Template.message.rendered = function () {
